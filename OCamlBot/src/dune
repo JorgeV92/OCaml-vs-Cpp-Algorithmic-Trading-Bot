@@ -1,3 +1,3 @@
 (executable
- (name main)
- (libraries cohttp-lwt-unix lwt ssl tls conduit-lwt-unix))
+ (name strategy)
+ (libraries cohttp-lwt-unix lwt ssl tls conduit-lwt-unix yojson))
