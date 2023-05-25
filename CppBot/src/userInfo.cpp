@@ -1,6 +1,5 @@
 #include"userInfo.h"
 userInformation::userInformation(std::string data) {
-
     // std::cout << "here1" << std::endl;
     data.erase(45, 45);
     std::cout << "parsed data is\n";
