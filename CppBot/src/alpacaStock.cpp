@@ -1,8 +1,8 @@
-#include "alpaca.h"
+#include "alpacaStock.h"
 #include "userInfo.h"
-alpaca::alpaca() {
-    apiKey = "PKTWT7C6BFGNJUMTNFOX";
-    apiSecret = "iGCcDRwgk7MrYaN4lqB1KfkXkj58aIax5ehHIxNj";
+alpacaStock::alpacaStock(std::string key, std::string secret) {
+    apiKey = key;
+    apiSecret = secret;
 }
 //Callback function that captures the response data and appending it to the responseData string
 size_t WriteCallback(char* contents, size_t size, size_t nmemb, std::string* response) {
@@ -13,7 +13,7 @@ size_t WriteCallback(char* contents, size_t size, size_t nmemb, std::string* res
     return totalSize;
 }
 
-void alpaca::showInformation() {
+void alpacaStock::showInformation() {
     //cUrl initialization -> set various options and perform HTTP requests with cURL.
   CURL* curl = curl_easy_init();
   if (curl) {
@@ -21,8 +21,8 @@ void alpaca::showInformation() {
     const char* url = "https://paper-api.alpaca.markets/v2/account";
     
     // Set up personal Alpaca API key and secret
-    const char* apiKey = "PKTWT7C6BFGNJUMTNFOX";
-    const char* apiSecret = "iGCcDRwgk7MrYaN4lqB1KfkXkj58aIax5ehHIxNj";
+    // const char* apiKey = "PKTWT7C6BFGNJUMTNFOX";
+    // const char* apiSecret = "iGCcDRwgk7MrYaN4lqB1KfkXkj58aIax5ehHIxNj";
 
     // Set the request headers
     struct curl_slist* headers = NULL;
@@ -68,7 +68,7 @@ void alpaca::showInformation() {
   }
 }
 
-void alpaca::buySellOrder() {
+void alpacaStock::buySellOrder() {
     CURL* curl;
     CURLcode res;
 
@@ -78,12 +78,15 @@ void alpaca::buySellOrder() {
 
     if (curl) {
         // Set API endpoint URL
+        //paper-api for the fake money
         curl_easy_setopt(curl, CURLOPT_URL, "https://paper-api.alpaca.markets/v2/orders");
 
         // Set headers
         struct curl_slist* headers = NULL;
-        headers = curl_slist_append(headers, "APCA-API-KEY-ID: PKTWT7C6BFGNJUMTNFOX");
-        headers = curl_slist_append(headers, "APCA-API-SECRET-KEY: iGCcDRwgk7MrYaN4lqB1KfkXkj58aIax5ehHIxNj");
+        std::string strAPIKey = "APCA-API-KEY-ID: " + std::string(apiKey);
+        headers = curl_slist_append(headers, strAPIKey.c_str());
+        std::string strAPISecret = "APCA-API-SECRET-KEY: " + std::string(apiSecret);
+        headers = curl_slist_append(headers, strAPISecret.c_str());
         headers = curl_slist_append(headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 

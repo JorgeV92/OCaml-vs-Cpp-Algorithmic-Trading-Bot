@@ -3,14 +3,16 @@
 //->  library for making HTTP requests 
 #include <curl/curl.h>
 #include<string>
-class alpaca {
+class alpacaStock {
     public:
-    alpaca();
-    void buySellOrder();
+    alpacaStock(std::string key, std::string secret);
     void showInformation();
+    void buySellOrder();
+    
+    
 
     private:
     //temporary key and secret that user should use
-    const char* apiKey;
-    const char* apiSecret;
+    std::string apiKey;
+    std::string apiSecret;
 };
