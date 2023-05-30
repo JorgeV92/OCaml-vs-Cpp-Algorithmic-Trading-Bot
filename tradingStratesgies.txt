@@ -1,4 +1,5 @@
 Algorithmic trading strategies
+
 1.Trend Following(Moving Average): This algorithm aims to identify and exploit trends in the market. 
 It uses technical analysis indicators to determine the direction of the market trend and generates buy or sell 
 signals accordingly. For example, it may buy when the price crosses above a moving average or sell when the 

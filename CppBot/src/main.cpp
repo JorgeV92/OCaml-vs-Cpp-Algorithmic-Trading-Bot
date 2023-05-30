@@ -1,6 +1,6 @@
 #include"alpacaStock.h"
 #include"userInfo.h"
-
+#include"algorithms.h"
 
 int main() {
   std::string key;

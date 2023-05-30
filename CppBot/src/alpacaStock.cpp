@@ -1,9 +1,16 @@
 #include "alpacaStock.h"
 #include "userInfo.h"
+//constructor
 alpacaStock::alpacaStock(std::string key, std::string secret) {
     apiKey = key;
     apiSecret = secret;
+    //paper api right now
+    api_base_url = "https://paper-api.alpaca.markets";
+    api_account_url = api_base_url + "/v2/account";
+    orders_url = api_base_url + "/v2/orders";
+
 }
+
 //Callback function that captures the response data and appending it to the responseData string
 size_t WriteCallback(char* contents, size_t size, size_t nmemb, std::string* response) {
     //std::cout << "content is " << contents << std::endl;
@@ -19,10 +26,6 @@ void alpacaStock::showInformation() {
   if (curl) {
     // Set the API endpoint URL
     const char* url = "https://paper-api.alpaca.markets/v2/account";
-    
-    // Set up personal Alpaca API key and secret
-    // const char* apiKey = "PKTWT7C6BFGNJUMTNFOX";
-    // const char* apiSecret = "iGCcDRwgk7MrYaN4lqB1KfkXkj58aIax5ehHIxNj";
 
     // Set the request headers
     struct curl_slist* headers = NULL;
@@ -45,9 +48,6 @@ void alpacaStock::showInformation() {
     // Perform the request
     CURLcode res = curl_easy_perform(curl);
 
-
-    
-    
     // Check for errors
     if (res != CURLE_OK) {
       std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
@@ -114,4 +114,22 @@ void alpacaStock::buySellOrder() {
 
     // Cleanup cURL
     curl_global_cleanup();
+}
+
+
+//GET REQUEST: GET request is an HTTP request method used to retrieve or fetch data from a specified resource
+// Function to send GET request to Alpaca API
+alpacaStock::responseData alpacaStock::sendGetRequest(const std::string& url) {
+    responseData responseData;
+    CURL* curl = curl_easy_init();//initialize and perform http request from client to server
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());//the url to retrieve the data from
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);//callback function that is responsible for writing the API response data into the responseData struct
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &(responseData.response));
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "curl/7.68.0");//to set User-Agent header for the request.
+        curl_easy_perform(curl);
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &(responseData.http_code));//HTTP response code is retrieved 
+        curl_easy_cleanup(curl);
+    }
+    return responseData;
 }
