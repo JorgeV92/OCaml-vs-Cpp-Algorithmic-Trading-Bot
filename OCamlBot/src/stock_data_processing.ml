@@ -26,25 +26,24 @@ let rec drop n list =
   | [] -> []
   | _ :: t -> drop (n-1) t
 
-
 let save_to_csv symbol short_term_period long_term_period =
   let%lwt _, body, _ = get_bars symbol in
   let prices_and_dates = Strategy.parse_prices_and_dates body in
   let short_term_ma = Strategy.moving_average_tuple short_term_period prices_and_dates in
   let long_term_ma = Strategy.moving_average_tuple long_term_period prices_and_dates in
   (* printing values for debug *)
-  let%lwt () = Lwt_io.printf "prices_and_dates: %s\n" 
+  (* let%lwt () = Lwt_io.printf "prices_and_dates: %s\n" 
     (String.concat ", " (List.map (fun (d, p) -> "(" ^ d ^ ", " ^ string_of_float p ^ ")") prices_and_dates)) in
   let%lwt () = Lwt_io.printf "short_term_ma: %s\n" 
       (String.concat ", " (List.map (fun (d, ma) -> "(" ^ d ^ ", " ^ string_of_float ma ^ ")") short_term_ma)) in
   let%lwt () = Lwt_io.printf "long_term_ma: %s\n" 
-      (String.concat ", " (List.map (fun (d, ma) -> "(" ^ d ^ ", " ^ string_of_float ma ^ ")") long_term_ma)) in
+      (String.concat ", " (List.map (fun (d, ma) -> "(" ^ d ^ ", " ^ string_of_float ma ^ ")") long_term_ma)) in *)
   let csv_data = combine3 prices_and_dates short_term_ma long_term_ma in
   let csv_data = List.map (fun ((date, price), (_, short_ma), (_, long_ma)) -> 
     [date; string_of_float price; string_of_float short_ma; string_of_float long_ma]
   ) csv_data in
-  let%lwt () = Lwt_io.printf "csv_data: %s\n" 
-      (String.concat "\n" (List.map (fun line -> String.concat "," line) csv_data)) in
+  (* let%lwt () = Lwt_io.printf "csv_data: %s\n" 
+      (String.concat "\n" (List.map (fun line -> String.concat "," line) csv_data)) in *)
   write_to_csv (symbol ^ ".csv") csv_data;
   Lwt.return_unit
 

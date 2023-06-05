@@ -1,7 +1,6 @@
 open Lwt
 open Alpaca
 
-
 module Strategy = struct
   let rec take n list =
     match list with
@@ -25,15 +24,8 @@ module Strategy = struct
     in 
     let dates, prices = List.split lst in
     aux [] dates prices
-    
-  
-  (* let should_buy short_ma long_ma =
-    List.hd short_ma > List.hd long_ma && List.hd (List.tl short_ma) < List.hd (List.tl long_ma)
 
-  let should_sell short_ma long_ma =
-    List.hd short_ma < List.hd long_ma && List.hd (List.tl short_ma) > List.hd (List.tl long_ma) *)
-
-  let rec should_buy short_ma long_ma = match short_ma, long_ma with
+  (* let rec should_buy short_ma long_ma = match short_ma, long_ma with
     | [], _ | _, [] -> false
     | sh :: st, lh :: lt -> 
         if sh > lh && List.hd st < List.hd lt then true
@@ -43,22 +35,20 @@ module Strategy = struct
     | [], _ | _, [] -> false
     | sh :: st, lh :: lt -> 
         if sh < lh && List.hd st > List.hd lt then true
-        else should_sell st lt
-  
+        else should_sell st lt *)
 
-    
-  (* let execute_strategy short_term long_term symbol data =
-      let _ = Lwt_io.printf "Running execute_strategy for symbol: %s\n" symbol in
-      let short_ma = moving_average short_term data in
-      let long_ma = moving_average long_term data in
-      let _ = Lwt_io.printf "Short MA: %f, Long MA: %f\n" (List.hd short_ma) (List.hd long_ma) in
-      if should_buy short_ma long_ma then begin
-        Lwt_io.printf "Executing BUY strategy for symbol: %s\n" symbol >>= fun () ->
-        place_order symbol 1 "buy" "market" "gtc"
-      end else if should_sell short_ma long_ma then begin
-        Lwt_io.printf "Executing SELL strategy for symbol: %s\n" symbol >>= fun () ->
-        place_order symbol 1 "sell" "market" "gtc"
-      end else Lwt.return (0, "") *)
+  let rec should_buy short_ma long_ma = match short_ma, long_ma with
+    | [], _ | _, [] -> false
+    | sh :: st, lh :: lt -> 
+        if sh > lh then true
+        else should_buy st lt
+  
+  let rec should_sell short_ma long_ma = match short_ma, long_ma with
+    | [], _ | _, [] -> false
+    | sh :: st, lh :: lt -> 
+        if sh < lh then true
+        else should_sell st lt
+      
 
     let print_float_list l =
       Lwt_list.iter_s (fun x -> Lwt_io.printf "%f " x) l 
@@ -67,8 +57,8 @@ module Strategy = struct
       let _ = Lwt_io.printf "Running execute_strategy for symbol: %s\n" symbol in
       let short_ma = moving_average short_term data in
       let long_ma = moving_average long_term data in
-      let _ = Lwt_io.printf "Short MA: " >>= fun () -> print_float_list short_ma in
-      let _ = Lwt_io.printf "\nLong MA: " >>= fun () -> print_float_list long_ma in
+      (* let _ = Lwt_io.printf "Short MA: " >>= fun () -> print_float_list short_ma in *)
+      (* let _ = Lwt_io.printf "\nLong MA: " >>= fun () -> print_float_list long_ma in *)
       if should_buy short_ma long_ma then begin
         Lwt_io.printf "Executing BUY strategy for symbol: %s\n" symbol >>= fun () ->
         place_order symbol 1 "buy" "market" "gtc"

@@ -56,10 +56,10 @@ let alpaca_endpoint_market = "https://data.alpaca.markets"
 let get_bars symbol =
   let uri = Uri.of_string (alpaca_endpoint_market ^ "/v2/stocks/" ^ symbol ^ "/bars") in
   let headers = Header.add headers "Content-Type" "application/json" in
-  let query = [("start", "2023-04-01T09:30:00-04:00");
+  let query = [("start", "2013-05-15T09:30:00-04:00");
                 ("end", "2023-05-15T16:00:00-04:00");
-                ("timeframe", "1Day"); (*  // changed from "1Min" to "1Hour, 1Day" *)
-                ("limit", "100")] in
+                ("timeframe", "1Hour"); (*  // changed from "1Min" to "1Hour, 1Day" *)
+                ("limit", "1000")] in
   let uri = Uri.with_query' uri query in
   Client.call ~headers `GET uri
   >>= fun (res, body) ->
@@ -95,4 +95,4 @@ let place_order symbol qty side type_ time_in_force =
     body |> Cohttp_lwt.Body.to_string >|= fun body ->
     (code, body)
   
-(* END fetching market data and placing orders funstionality. *)
+(* END fetching market data and placing orders. *)

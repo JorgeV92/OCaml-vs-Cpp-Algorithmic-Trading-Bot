@@ -88,5 +88,9 @@ def plot_stock_data(filename, stock_symbol):
     # Show the plot
     plt.show()
 
-plot_stock_data("AAPL.csv", "AAPL")
-plot_stock_data("MSFT.csv", "MSFT")
+# plot_stock_data("AAPL.csv", "AAPL")
+# plot_stock_data("MS.csv", "MS")
+# plot_stock_data("MSFT.csv", "MSFT")
+# plot_stock_data("NFLX.csv", "NFLX")
+# plot_stock_data("TSLA.csv", "TSLA")
+plot_stock_data("NVDA.csv", "NVDA")

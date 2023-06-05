@@ -1,1 +1,1 @@
-stock_data_processing.pp.ml: Alpaca List Lwt Lwt_io Strategy String
+stock_data_processing.pp.ml: Alpaca List Lwt Strategy String
