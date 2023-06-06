@@ -11,13 +11,8 @@ class alpacaStock {
     alpacaStock(std::string key, std::string secret);
     void showInformation();
     void buySellOrder();
-
-    // Struct for storing API response data
-    struct responseData {
-        std::string response;
-        long http_code;
-    };
-    responseData sendGetRequest(const std::string& url);
+    std::string sendGetRequest(const std::string& url);
+    void performMovingAverage();
     
 
     private:

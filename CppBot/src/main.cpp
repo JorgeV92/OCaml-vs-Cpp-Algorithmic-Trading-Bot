@@ -11,6 +11,7 @@ int main() {
   std::cin >> secret;
   alpacaStock ap = alpacaStock(key, secret);
   //ap.buySellOrder();
-  ap.showInformation();
+  //ap.showInformation();
+  ap.performMovingAverage();
   return 0;
 }

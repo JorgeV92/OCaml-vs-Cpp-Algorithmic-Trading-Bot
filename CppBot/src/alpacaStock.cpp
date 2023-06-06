@@ -116,20 +116,75 @@ void alpacaStock::buySellOrder() {
     curl_global_cleanup();
 }
 
-
 //GET REQUEST: GET request is an HTTP request method used to retrieve or fetch data from a specified resource
 // Function to send GET request to Alpaca API
-alpacaStock::responseData alpacaStock::sendGetRequest(const std::string& url) {
-    responseData responseData;
-    CURL* curl = curl_easy_init();//initialize and perform http request from client to server
+std::string alpacaStock::sendGetRequest(const std::string& url) {
+    CURL* curl = curl_easy_init();
+    std::string response;
+
+     // Set up API headers
+    struct curl_slist* headers = nullptr;
     if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());//the url to retrieve the data from
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);//callback function that is responsible for writing the API response data into the responseData struct
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &(responseData.response));
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, "curl/7.68.0");//to set User-Agent header for the request.
-        curl_easy_perform(curl);
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &(responseData.http_code));//HTTP response code is retrieved 
+        // Set the URL 
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        // Set request type
+        curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+      
+        
+        headers = curl_slist_append(headers, ("APCA-API-KEY-ID: " + apiKey).c_str());
+        headers = curl_slist_append(headers, ("APCA-API-SECRET-KEY: " + apiSecret).c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+        // Set up response storage
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+        // Perform the HTTP request
+        CURLcode res = curl_easy_perform(curl);
+        if (res != CURLE_OK) {
+            std::cerr << "Error: Failed to perform HTTP request: " << curl_easy_strerror(res) << std::endl;
+        }
+
         curl_easy_cleanup(curl);
+        
+    } else {
+        std::cerr << "Error: Failed initializing cURL" << std::endl;
     }
-    return responseData;
+    std::cout << "response is " << response << std::endl;
+    // Clean up
+    curl_slist_free_all(headers);
+  
+    return "";
+}
+
+
+
+void alpacaStock::performMovingAverage() {
+
+  //
+  // std::cout << "performingMovingAverage" << std::endl;
+  // std::cout << "put your preffered stocktype" << std::endl;
+  // std::string stockType = "";
+  // std::cin >> stockType;
+
+  // std::cout << "put your preffered numperiods" << std::endl;
+  // int numPeriods;
+  // std::cin >> numPeriods;
+
+
+  // Construct the API request URL
+  // std::string url = "https://data.alpaca.markets/v2/stocks/";
+  // url += "?symbols=" + stockType + "&limit=" + std::to_string(numPeriods);
+  std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2023-04-01T09:30:00-04:00&end=2023-05-15T16:00:00-04:00&timeframe=1Day&limit=100";
+
+
+  //send HTTP getRequest
+  std::string responseData = alpacaStock::sendGetRequest(url);
+  std::cout << "Response: " << responseData << std::endl;
+
+  
+
+    return;
+
+
 }
