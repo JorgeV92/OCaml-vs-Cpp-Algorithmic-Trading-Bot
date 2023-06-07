@@ -1,7 +1,6 @@
 #include"alpacaStock.h"
 #include"userInfo.h"
 #include"algorithms.h"
-
 int main() {
   std::string key;
   std::string secret;
@@ -12,6 +11,8 @@ int main() {
   alpacaStock ap = alpacaStock(key, secret);
   //ap.buySellOrder();
   //ap.showInformation();
-  ap.performMovingAverage();
+  ap.extractRealtimeInfo();
+  
+
   return 0;
 }
