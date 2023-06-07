@@ -1,6 +1,6 @@
-CC = g++
-CFLAGS = -std=c++11 -Wall
-LDFLAGS = -lcurl
+CC = clang++
+CFLAGS = -std=c++11 -Wall -I /usr/local/Cellar/jsoncpp/1.9.5/include/
+LDFLAGS = -lcurl -L /usr/local/Cellar/jsoncpp/1.9.5/lib -ljsoncpp
 
 all: main
 
@@ -11,7 +11,7 @@ userInfo.o : userInfo.cpp
 	$(CXX) $(CXXFLAGS) userInfo.cpp -o userInfo.o 
 
 alpacaStock.o : alpacaStock.cpp
-	$(CXX) $(CXXFLAGS) alpacaStock.cpp -o alpacaStock.o 
+	$(CXX) $(CXXFLAGS) alpacaStock.cpp -o alpacaStock.o
 	
 clean:
 	rm -f main

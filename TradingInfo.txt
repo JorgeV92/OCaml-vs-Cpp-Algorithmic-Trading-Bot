@@ -1,0 +1,8 @@
+"t": "2023-04-03T04:00:00Z" - This represents the timestamp for the data entry.
+"o": 164.27 - This is the opening price for the corresponding time period.
+"h": 166.29 - This is the highest price reached during the corresponding time period.
+"l": 164.22 - This is the lowest price reached during the corresponding time period.
+"c": 166.17 - This is the closing price for the corresponding time period.
+"v": 56998454 - This is the volume of trading activity during the corresponding time period.
+"n": 569682 - This represents the number of trades executed during the corresponding time period.
+"vw": 165.348912 - This is the volume-weighted average price for the corresponding time period.

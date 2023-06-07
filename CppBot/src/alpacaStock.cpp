@@ -1,5 +1,23 @@
 #include "alpacaStock.h"
 #include "userInfo.h"
+
+//generating
+template<typename T>
+void generateCSV(const std::vector<T>& dataVect, const std::string& filename) {
+    std::ofstream file(filename);//output stream for writing to files
+
+    if(file.is_open()) {
+        for(size_t i = 0; i < dataVect.size(); i++) {
+            file << dataVect[i] << std::endl;
+        }
+        file.close();
+    } else {
+        std::cerr << "Failed to open the file to put the data." << std::endl;
+    }
+    return;
+}
+
+
 //constructor
 alpacaStock::alpacaStock(std::string key, std::string secret) {
     apiKey = key;
@@ -150,18 +168,17 @@ std::string alpacaStock::sendGetRequest(const std::string& url) {
     } else {
         std::cerr << "Error: Failed initializing cURL" << std::endl;
     }
+    std::cout << "\n";
     std::cout << "response is " << response << std::endl;
     // Clean up
     curl_slist_free_all(headers);
   
-    return "";
+    return response;
 }
 
 
 
-void alpacaStock::performMovingAverage() {
-
-  //
+void alpacaStock::extractRealtimeInfo() {
   // std::cout << "performingMovingAverage" << std::endl;
   // std::cout << "put your preffered stocktype" << std::endl;
   // std::string stockType = "";
@@ -180,11 +197,56 @@ void alpacaStock::performMovingAverage() {
 
   //send HTTP getRequest
   std::string responseData = alpacaStock::sendGetRequest(url);
-  std::cout << "Response: " << responseData << std::endl;
-
+  std::cout << "Response is : " << responseData << std::endl;
+  // Parse the JSON response
   
+Json::Value root; // to store the parsed json data
+Json::CharReaderBuilder reader; //object that helps in parsing the JSON.
+std::istringstream jsonStream(responseData);//to convert jsonData string into an input stream
+std::string parseErrors;//to store any error during the parsing
 
-    return;
+if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function to parse the JSON data from the jsonStream into the root object
+    if (root.isMember("bars") && root["bars"].isArray()) {
+        const Json::Value& bars = root["bars"];
+        for (const Json::Value& bar : bars) {
+          //t for the time information
+            if (bar.isMember("t") && bar["t"].isString()) {
+                std::string tValue = bar["t"].asString();
+                realTimeTimeStamp.push_back(tValue);
+                std::cout << "t: " << tValue << std::endl;
+            }
+          //c for the closed price information
+            if (bar.isMember("c") && bar["c"].isNumeric()) {
+                double cValue = bar["c"].asDouble();
+                closedPrices.push_back(cValue);
+                std::cout << "c: " << cValue << std::endl;
+            }
+        }
+    }
+} else {
+    std::cout << "Failed to parse JSON: " << parseErrors << std::endl;
+}
+// for (size_t i = 0; i < realTimeTimeStamp.size(); i++) {
+//   std::cout << "realTimeStamp is " << realTimeTimeStamp[i] << std::endl;
+// }
+
+// for (size_t i = 0; i < closedPrices.size(); i++) {
+//   std::cout << "closedPrices is " << closedPrices[i] << std::endl;
+// }
+
+  std::string realTimefileName;
+  std::cout << "put the realTimefileName you want to store the realtimeStamps!" << std::endl;
+  std::cin >> realTimefileName;
+  generateCSV(realTimeTimeStamp, realTimefileName); 
+
+  std::string closedPricesfileName;
+  std::cout << "put the closedPricesfileName you want to store the closedPricesfileName!" << std::endl;
+  std::cin >> closedPricesfileName;
+  generateCSV(closedPrices, closedPricesfileName); 
+
+  return;
 
 
 }
+
+
