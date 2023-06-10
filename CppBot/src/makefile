@@ -4,7 +4,7 @@ LDFLAGS = -lcurl -L /usr/local/Cellar/jsoncpp/1.9.5/lib -ljsoncpp
 
 all: main
 
-main: main.cpp userInfo.cpp alpacaStock.cpp
+main: main.cpp userInfo.cpp alpacaStock.cpp algorithms.cpp
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 userInfo.o : userInfo.cpp
@@ -12,6 +12,9 @@ userInfo.o : userInfo.cpp
 
 alpacaStock.o : alpacaStock.cpp
 	$(CXX) $(CXXFLAGS) alpacaStock.cpp -o alpacaStock.o
+
+algorithms.o : algorithms.cpp
+	$(CXX) $(CXXFLAGS) algorithms.cpp -o algorithms.o
 	
 clean:
 	rm -f main

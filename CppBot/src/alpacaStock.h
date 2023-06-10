@@ -17,6 +17,8 @@ class alpacaStock {
     std::string sendGetRequest(const std::string& url);
     void extractRealtimeInfo();//extract realtime information for specific stock option -> can check timestamps, closed prices etc..
     void generateCSV(const std::string& filename);
+
+    std::vector<double> extractClosedPrices();
     private:
     //temporary key and secret that user should use
     std::string apiKey;

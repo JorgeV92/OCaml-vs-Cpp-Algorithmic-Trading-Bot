@@ -1,7 +1,7 @@
 #include "alpacaStock.h"
 #include "userInfo.h"
 
-
+//generates CSV with whole data
 void alpacaStock::generateCSV(const std::string& filename) {
     std::ofstream file(filename);//output stream for writing to files
     if(file.is_open()) {
@@ -23,7 +23,6 @@ void alpacaStock::generateCSV(const std::string& filename) {
     }
     return;
 }
-
 
 //constructor
 alpacaStock::alpacaStock(std::string key, std::string secret) {
@@ -280,11 +279,12 @@ if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function 
   std::cout << "put the filename you want to store the realtimeInformation!" << std::endl;
   std::cin >> fileName;
   generateCSV(fileName); 
-
-
   return;
 
 
 }
 
 
+std::vector<double> alpacaStock::extractClosedPrices() {
+  return closedPrices;
+}
