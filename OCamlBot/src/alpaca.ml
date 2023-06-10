@@ -56,10 +56,10 @@ let alpaca_endpoint_market = "https://data.alpaca.markets"
 let get_bars symbol =
   let uri = Uri.of_string (alpaca_endpoint_market ^ "/v2/stocks/" ^ symbol ^ "/bars") in
   let headers = Header.add headers "Content-Type" "application/json" in
-  let query = [("start", "2013-05-15T09:30:00-04:00");
+  let query = [("start", "2020-05-15T09:30:00-04:00");
                 ("end", "2023-05-15T16:00:00-04:00");
-                ("timeframe", "1Hour"); (*  // changed from "1Min" to "1Hour, 1Day" *)
-                ("limit", "1000")] in
+                ("timeframe", "1Day"); (*  // changed from "1Min" to "1Hour, 1Day" *)
+                ("limit", "5000")] in
   let uri = Uri.with_query' uri query in
   Client.call ~headers `GET uri
   >>= fun (res, body) ->

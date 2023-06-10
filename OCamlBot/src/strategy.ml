@@ -53,19 +53,76 @@ module Strategy = struct
     let print_float_list l =
       Lwt_list.iter_s (fun x -> Lwt_io.printf "%f " x) l 
     
-    let execute_strategy short_term long_term symbol data =
+    (* let execute_strategy short_term long_term symbol data =
       let _ = Lwt_io.printf "Running execute_strategy for symbol: %s\n" symbol in
       let short_ma = moving_average short_term data in
       let long_ma = moving_average long_term data in
+
+
       (* let _ = Lwt_io.printf "Short MA: " >>= fun () -> print_float_list short_ma in *)
       (* let _ = Lwt_io.printf "\nLong MA: " >>= fun () -> print_float_list long_ma in *)
+
+
       if should_buy short_ma long_ma then begin
         Lwt_io.printf "Executing BUY strategy for symbol: %s\n" symbol >>= fun () ->
         place_order symbol 1 "buy" "market" "gtc"
       end else if should_sell short_ma long_ma then begin
         Lwt_io.printf "Executing SELL strategy for symbol: %s\n" symbol >>= fun () ->
         place_order symbol 1 "sell" "market" "gtc"
-      end else Lwt.return (0, "")
+
+      end else Lwt.return (0, "") *)
+
+
+      (* let execute_strategy short_term long_term symbol data =
+        let _ = Lwt_io.printf "Running execute_strategy for symbol: %s\n" symbol in
+        let short_ma = moving_average short_term data in
+        let long_ma = moving_average long_term data in
+      
+        let rec check_each_point short_ma long_ma = 
+          match short_ma, long_ma with
+          | [], _ | _, [] -> Lwt.return (0, "")
+          | sh :: st, lh :: lt -> 
+              if sh > lh then begin
+                Lwt_io.printf "Executing BUY strategy for symbol: %s\n" symbol >>= fun () ->
+                place_order symbol 1 "buy" "market" "gtc" >>= fun _ ->
+                Lwt_unix.sleep 2. >>= fun () ->  (* Add a delay of 1 second *)
+                check_each_point st lt
+              end else if sh < lh then begin
+                Lwt_io.printf "Executing SELL strategy for symbol: %s\n" symbol >>= fun () ->
+                place_order symbol 1 "sell" "market" "gtc" >>= fun _ ->
+                Lwt_unix.sleep 2. >>= fun () ->  (* Add a delay of 1 second *)
+                check_each_point st lt
+              end else check_each_point st lt
+        in
+        check_each_point short_ma long_ma *)
+        
+        let execute_strategy short_term long_term symbol data =
+          let _ = Lwt_io.printf "Running execute_strategy for symbol: %s\n" symbol in
+          let short_ma = moving_average short_term data in
+          let long_ma = moving_average long_term data in
+                  
+          let rec check_each_point prev_sh prev_lh short_ma long_ma buy_count sell_count = 
+            match short_ma, long_ma with
+            | [], _ | _, [] -> 
+                Lwt_io.printf "Total buy transactions: %d\n" buy_count >>= fun () ->
+                Lwt_io.printf "Total sell transactions: %d\n" sell_count >>= fun () ->
+                Lwt.return (0, "")
+            | sh :: st, lh :: lt -> 
+                if prev_sh < prev_lh && sh > lh then begin
+                  Lwt_io.printf "Executing BUY strategy for symbol: %s\n" symbol >>= fun () ->
+                  place_order symbol 1 "buy" "market" "gtc" >>= fun _ ->
+                  Lwt_unix.sleep 2. >>= fun () ->  (* Add a delay of 1 second *)
+                  check_each_point sh lh st lt (buy_count + 1) sell_count
+                end else if prev_sh > prev_lh && sh < lh then begin
+                  Lwt_io.printf "Executing SELL strategy for symbol: %s\n" symbol >>= fun () ->
+                  place_order symbol 1 "sell" "market" "gtc" >>= fun _ ->
+                  Lwt_unix.sleep 2. >>= fun () ->  (* Add a delay of 1 second *)
+                  check_each_point sh lh st lt buy_count (sell_count + 1)
+                end else check_each_point sh lh st lt buy_count sell_count
+          in
+          check_each_point (List.hd short_ma) (List.hd long_ma) (List.tl short_ma) (List.tl long_ma) 0 0
+        
+      
 
     let parse_prices_and_dates body =
       let json = Yojson.Basic.from_string body in
@@ -105,7 +162,7 @@ module Strategy = struct
     )
 
 end
-
+ 
   
   
   
