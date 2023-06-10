@@ -1,14 +1,21 @@
 #include "alpacaStock.h"
 #include "userInfo.h"
 
-//generating
-template<typename T>
-void generateCSV(const std::vector<T>& dataVect, const std::string& filename) {
-    std::ofstream file(filename);//output stream for writing to files
 
+void alpacaStock::generateCSV(const std::string& filename) {
+    std::ofstream file(filename);//output stream for writing to files
     if(file.is_open()) {
-        for(size_t i = 0; i < dataVect.size(); i++) {
-            file << dataVect[i] << std::endl;
+        file << "realTimeTimeStamp," << "openingPrices," << "highestPrices," << "lowestPrices," 
+        << "closedPrices," << "volumeOfTrading," << "numberOfTrades," << "vwAveragePrices" << std::endl;
+        for(size_t i = 0; i < realTimeTimeStamp.size(); i++) {
+            file << realTimeTimeStamp[i] << ",";
+            file << openingPrices[i] << ",";
+            file << highestPrices[i] << ",";
+            file << lowestPrices[i] << ",";
+            file << closedPrices[i] << ",";
+            file << volumeOfTrading[i] << ",";
+            file << numberOfTrades[i] << ",";
+            file << vwAveragePrices[i] << std::endl;
         }
         file.close();
     } else {
@@ -26,7 +33,6 @@ alpacaStock::alpacaStock(std::string key, std::string secret) {
     api_base_url = "https://paper-api.alpaca.markets";
     api_account_url = api_base_url + "/v2/account";
     orders_url = api_base_url + "/v2/orders";
-
 }
 
 //Callback function that captures the response data and appending it to the responseData string
@@ -192,7 +198,7 @@ void alpacaStock::extractRealtimeInfo() {
   // Construct the API request URL
   // std::string url = "https://data.alpaca.markets/v2/stocks/";
   // url += "?symbols=" + stockType + "&limit=" + std::to_string(numPeriods);
-  std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2023-04-01T09:30:00-04:00&end=2023-05-15T16:00:00-04:00&timeframe=1Day&limit=100";
+  std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2023-04-01T09:30:00-04:00&end=2023-06-08T16:00:00-04:00&timeframe=1Day&limit=200";
 
 
   //send HTTP getRequest
@@ -215,13 +221,49 @@ if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function 
                 realTimeTimeStamp.push_back(tValue);
                 std::cout << "t: " << tValue << std::endl;
             }
+          //o for the opening price information
+            if (bar.isMember("o") && bar["o"].isNumeric()) {
+                double oValue = bar["o"].asDouble();
+                openingPrices.push_back(oValue);
+                std::cout << "o: " << oValue << std::endl;
+            }
+          //h for the highest price information
+            if (bar.isMember("h") && bar["h"].isNumeric()) {
+                double hValue = bar["h"].asDouble();
+                highestPrices.push_back(hValue);
+                std::cout << "h: " << hValue << std::endl;
+            }
+          //l for the lowest price information
+            if (bar.isMember("l") && bar["l"].isNumeric()) {
+                double lValue = bar["l"].asDouble();
+                lowestPrices.push_back(lValue);
+                std::cout << "l: " << lValue << std::endl;
+            }
           //c for the closed price information
             if (bar.isMember("c") && bar["c"].isNumeric()) {
                 double cValue = bar["c"].asDouble();
                 closedPrices.push_back(cValue);
                 std::cout << "c: " << cValue << std::endl;
             }
-        }
+          //v for the volumeOfTrading
+            if (bar.isMember("v") && bar["v"].isNumeric()) {
+                double vValue = bar["v"].asDouble();
+                volumeOfTrading.push_back(vValue);
+                std::cout << "v: " << vValue << std::endl;
+            }
+          //n for the number of Trading 
+            if (bar.isMember("n") && bar["n"].isNumeric()) {
+                double numberOfTrading = bar["n"].asDouble();
+                numberOfTrades.push_back(numberOfTrading);
+                std::cout << "n: " << numberOfTrading << std::endl;
+            }
+          //vw for the vwAveragePrices
+            if (bar.isMember("vw") && bar["vw"].isNumeric()) {
+                double vwavgPrice = bar["vw"].asDouble();
+                vwAveragePrices.push_back(vwavgPrice);
+                std::cout << "vw: " << vwavgPrice << std::endl;
+            }
+        } 
     }
 } else {
     std::cout << "Failed to parse JSON: " << parseErrors << std::endl;
@@ -234,15 +276,11 @@ if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function 
 //   std::cout << "closedPrices is " << closedPrices[i] << std::endl;
 // }
 
-  std::string realTimefileName;
-  std::cout << "put the realTimefileName you want to store the realtimeStamps!" << std::endl;
-  std::cin >> realTimefileName;
-  generateCSV(realTimeTimeStamp, realTimefileName); 
+  std::string fileName;
+  std::cout << "put the filename you want to store the realtimeInformation!" << std::endl;
+  std::cin >> fileName;
+  generateCSV(fileName); 
 
-  std::string closedPricesfileName;
-  std::cout << "put the closedPricesfileName you want to store the closedPricesfileName!" << std::endl;
-  std::cin >> closedPricesfileName;
-  generateCSV(closedPrices, closedPricesfileName); 
 
   return;
 

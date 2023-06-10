@@ -8,8 +8,6 @@
 #include<string>
 
 
-template<typename T>
-void generateCSV(const std::vector<T>& dataVect, const std::string& filename);
 
 class alpacaStock {
     public:
@@ -21,8 +19,7 @@ class alpacaStock {
     void buySellOrder();
     std::string sendGetRequest(const std::string& url);
     void extractRealtimeInfo();//extract realtime information for specific stock option -> can check timestamps, closed prices etc..
-    // void generateTimestampCSV(const std::vector<T>& dataVect, const std::string& filename);
-
+    void generateCSV(const std::string& filename);
     private:
     //temporary key and secret that user should use
     std::string apiKey;
@@ -30,7 +27,14 @@ class alpacaStock {
 
     //to store the realtime information
     std::vector<std::string> realTimeTimeStamp;
+    std::vector<double> openingPrices;
+    std::vector<double> highestPrices;
+    std::vector<double> lowestPrices;
     std::vector<double> closedPrices;
+    std::vector<double> volumeOfTrading;
+    std::vector<double> numberOfTrades;
+    std::vector<double> vwAveragePrices;
+
 
     
 
