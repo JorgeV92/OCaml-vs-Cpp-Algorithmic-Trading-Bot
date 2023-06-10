@@ -6,9 +6,6 @@
 //->JSON parsing library
 #include <json/json.h>
 #include<string>
-
-
-
 class alpacaStock {
     public:
     std::string api_base_url;
@@ -34,9 +31,5 @@ class alpacaStock {
     std::vector<double> volumeOfTrading;
     std::vector<double> numberOfTrades;
     std::vector<double> vwAveragePrices;
-
-
-    
-
 
 };
