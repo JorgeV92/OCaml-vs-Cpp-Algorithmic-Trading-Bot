@@ -198,7 +198,7 @@ void alpacaStock::extractRealtimeInfo() {
   // Construct the API request URL
   // std::string url = "https://data.alpaca.markets/v2/stocks/";
   // url += "?symbols=" + stockType + "&limit=" + std::to_string(numPeriods);
-  std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2023-04-01T09:30:00-04:00&end=2023-06-08T16:00:00-04:00&timeframe=1Day&limit=200";
+  std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2023-02-08T09:30:00-04:00&end=2023-06-08T16:00:00-04:00&timeframe=1Day&limit=200";
 
 
   //send HTTP getRequest

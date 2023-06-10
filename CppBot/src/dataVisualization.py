@@ -21,7 +21,7 @@ def plottingData(timeStamps, openingPrices, highestPrices, lowestPrices, closedP
     plt.xticks(rotation='vertical')  # Rotate x-axis tick labels for better readability
     min_lowest = min(lowestPrices)
     max_highest = max(highestPrices)
-    y_ticks = np.arange(min_lowest, max_highest + 1, 1)
+    y_ticks = np.arange(min_lowest, max_highest + 10, 10)
     plt.yticks(y_ticks)
     plt.legend()
     plt.tight_layout()  # Adjust layout to prevent label overlap
