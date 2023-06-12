@@ -23,41 +23,53 @@ let get_account_info () =
   body |> Cohttp_lwt.Body.to_string >|= fun body ->
   (code, body)
 
-let process_json json =
-  let id = json |> member "id" |> to_string in
-  let status = json |> member "status" |> to_string in
-  (id, status)
-
-
+  let process_json json =
+    let status = json |> member "status" |> to_string in
+    let buying_power = json |> member "buying_power" |> to_string in
+    let portfolio_value = json |> member "portfolio_value" |> to_string in
+    let cash = json |> member "cash" |> to_string in
+    let equity = json |> member "equity" |> to_string in
+    let daytrading_buying_power = json |> member "daytrading_buying_power" |> to_string in
+    (status, buying_power, portfolio_value, cash, equity, daytrading_buying_power)
+  
   let run_account_info_of_user () =
     let thread =
       get_account_info ()
       >>= fun resp1 ->
       begin match resp1 with
       | (200, body) -> 
-        print_endline ("Success: Full account info = " ^ body); 
+        (* print_endline ("Success: Full account info = " ^ body); *)
         let json = Yojson.Basic.from_string body in 
-        let (id, status) = process_json json in 
-        print_endline ("ID = " ^ id ^ ", Status = " ^ status); 
+        let (status, buying_power, portfolio_value, cash, equity, daytrading_buying_power) = process_json json in 
+        print_endline ("\nAccount Status: " ^ status ^ 
+                       "\nBuying Power: " ^ buying_power ^ 
+                       "\nPortfolio Value: " ^ portfolio_value ^ 
+                       "\nCash: " ^ cash ^ 
+                       "\nEquity: " ^ equity ^ 
+                       "\nDay Trading Buying Power: " ^ daytrading_buying_power); 
         Lwt.return ()
       | _ -> print_endline "Error"; Lwt.return ()
       end
     in
     Lwt_main.run thread
-
-  
 (* End of account info functionality *)
 
 (* START fetching market data and placing orders functionality. *)
 
 let alpaca_endpoint_market = "https://data.alpaca.markets"
 
+let current_date () =
+  let open Ptime in
+  let date, _ = Ptime_clock.now () |> to_date_time in
+  let year, month, day = date in
+  Printf.sprintf "%04d-%02d-%02d" year month day
+
 (* Function to get the bars (trading data) of a given stock symbol *)                            
 let get_bars symbol =
   let uri = Uri.of_string (alpaca_endpoint_market ^ "/v2/stocks/" ^ symbol ^ "/bars") in
   let headers = Header.add headers "Content-Type" "application/json" in
-  let query = [("start", "2020-05-15T09:30:00-04:00");
-                ("end", "2023-05-15T16:00:00-04:00");
+  let query = [("start","2021-05-15T09:30:00-04:00");
+                ("end", current_date () ^ "T16:00:00-04:00");
                 ("timeframe", "1Day"); (*  // changed from "1Min" to "1Hour, 1Day" *)
                 ("limit", "5000")] in
   let uri = Uri.with_query' uri query in
