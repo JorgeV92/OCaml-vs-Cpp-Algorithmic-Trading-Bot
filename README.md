@@ -10,7 +10,7 @@ This repository contains implementations of a simple algorithmic trading bot in 
 3. [Usage](#usage)
 4. [Testing](#testing)
 5. [Results and Performance](#results-and-performance)
-6. [Project Status](#Project Status)
+6. [Project Status](#project-status)
 
 ## Introduction
 
