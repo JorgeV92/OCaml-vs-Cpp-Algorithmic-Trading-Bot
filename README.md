@@ -1,5 +1,6 @@
 # OCaml vs C++ Algorithmic Trading Bot
 ![Development Status](https://img.shields.io/badge/status-under%20development-orange)
+
 This repository contains implementations of a simple algorithmic trading bot in both OCaml and C++. The purpose of this project is to compare the performance of the two implementations.
 
 ## Table of Contents
