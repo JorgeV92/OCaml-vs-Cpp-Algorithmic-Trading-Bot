@@ -1,0 +1,4 @@
+(executable
+ (name trading_bot)
+ (libraries cohttp-lwt-unix lwt lwt_ppx ssl tls conduit-lwt-unix yojson)
+ (preprocess (pps lwt_ppx)))
