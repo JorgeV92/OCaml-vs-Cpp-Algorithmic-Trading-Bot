@@ -68,6 +68,11 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "list": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "future": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "regex": "cpp",
+        "variant": "cpp"
     }
 }

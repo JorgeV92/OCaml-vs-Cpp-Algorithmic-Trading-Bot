@@ -30,11 +30,15 @@ void algo::calculateMovingAverage(const std::vector<double>& prices, int shortTe
         double average = sum / longTerm;
         LMA.push_back(average);
     }
+
+    std::cout << "size of SMA " << SMA.size() << std::endl;
+    std::cout << "size of LMA " << LMA.size() << std::endl;
 }
 
 void algo::crossOverSignal() {
     // Generate crossover signals
-    for (int i = 1; i < SMA.size(); i++) {
+    //since LMA size is always smaller, we use LMA size
+    for (int i = 1; i < LMA.size(); i++) {
         //if SMA Prev < LMA Prev && 
         if (SMA[i] > LMA[i] && SMA[i - 1] < LMA[i - 1]) {
             std::cout << "Buy signal at index " << i << std::endl;
@@ -69,6 +73,9 @@ void algo::movingAveragesCSV(const std::string& smaFile, const std::string& lmaF
     } else {
         std::cerr << "Failed to open the LMA file to put the data." << std::endl;
     }
+    std::cout << "size of SMA " << SMA.size() << std::endl;
+    std::cout << "size of LMA " << LMA.size() << std::endl;
 
+    
     return;
 }

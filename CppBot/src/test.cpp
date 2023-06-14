@@ -1,16 +1,16 @@
-#include <json/json.h>
-#include <iostream>
+// #include <catch2/catch.hpp>
 
-int main() {
-    Json::Value root;
-    root["name"] = "John";
-    root["age"] = 30;
-    root["city"] = "New York";
+// TEST_CASE("Simple Test") {
+//     int a = 2;
+//     int b = 3;
 
-    Json::StreamWriterBuilder writer;
-    std::string output = Json::writeString(writer, root);
+//     SECTION("Addition") {
+//         int sum = a + b;
+//         REQUIRE(sum == 5);
+//     }
 
-    std::cout << output << std::endl;
-
-    return 0;
-}
+//     SECTION("Multiplication") {
+//         int product = a * b;
+//         REQUIRE(product == 6);
+//     }
+// }
