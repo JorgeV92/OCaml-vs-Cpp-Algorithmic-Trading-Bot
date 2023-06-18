@@ -183,31 +183,33 @@ std::string alpacaStock::sendGetRequest(const std::string& url) {
 
 
 
-void alpacaStock::extractRealtimeInfo() {
-  // std::cout << "performingMovingAverage" << std::endl;
-  // std::cout << "put your preffered stocktype" << std::endl;
-  // std::string stockType = "";
-  // std::cin >> stockType;
+void alpacaStock::extractData(std::string stockSymbol, std::string startDate,std::string endDate,std::string timeframe, int limit) {
+  // Construct the url using the user input
+    std::stringstream url;
+    url << "https://data.alpaca.markets/v2/stocks/" << stockSymbol << "/bars"
+        << "?start=" << startDate
+        << "&end=" << endDate
+        << "&timeframe=" << timeframe
+        << "&limit=" << limit;
 
-  // std::cout << "put your preffered numperiods" << std::endl;
-  // int numPeriods;
-  // std::cin >> numPeriods;
-
-
-  // Construct the API request URL
-  // std::string url = "https://data.alpaca.markets/v2/stocks/";
-  // url += "?symbols=" + stockType + "&limit=" + std::to_string(numPeriods);
-  std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2022-12-08T09:30:00-04:00&end=2023-06-08T16:00:00-04:00&timeframe=1Day&limit=200";
+  // Retrieve the complete URL string
+  std::string urlString = url.str();
+  //std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2022-12-08T09:30:00-04:00&end=2023-06-08T16:00:00-04:00&timeframe=1Day&limit=200";
 
 
-  //send HTTP getRequest
-  std::string responseData = alpacaStock::sendGetRequest(url);
+  //send HTTP getRequest to retrieve data
+  std::string responseData = alpacaStock::sendGetRequest(urlString);
   std::cout << "Response is : " << responseData << std::endl;
-  // Parse the JSON response
+  infoData =  responseData;
+  return;
+  
+}
+void alpacaStock::parseJSONData() {
+// Parse the JSON response
   
 Json::Value root; // to store the parsed json data
 Json::CharReaderBuilder reader; //object that helps in parsing the JSON.
-std::istringstream jsonStream(responseData);//to convert jsonData string into an input stream
+std::istringstream jsonStream(infoData);//to convert jsonData string into an input stream
 std::string parseErrors;//to store any error during the parsing
 
 if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function to parse the JSON data from the jsonStream into the root object
@@ -276,12 +278,12 @@ if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function 
 // }
 
   std::string fileName;
-  std::cout << "put the filename you want to store the realtimeInformation!" << std::endl;
+  std::cout << "put the filename you want to store the stockInformation!" << std::endl;
   std::cin >> fileName;
   generateCSV(fileName); 
   return;
-}
 
+}
 std::vector<double> alpacaStock::extractClosedPrices() {
   return closedPrices;
 }

@@ -1,8 +1,10 @@
 #include"alpacaStock.h"
 #include"userInfo.h"
 #include"algorithms.h"
-#include"test.cpp"
+//#include"test.cpp"
+
 int main() {
+  //Getting information from the user for certification to alpaca api
   std::string key;
   std::string secret;
   std::cout << "put your alpaca key: " << std::endl;
@@ -12,20 +14,44 @@ int main() {
   alpacaStock ap = alpacaStock(key, secret);
   //ap.buySellOrder();
   //ap.showInformation();
-  ap.extractRealtimeInfo();
 
+  //Provide stock information for the desired time period requested by the user.
+  std::string stockSymbol;
+  std::string startDate;
+  std::string endDate;
+  std::string timeframe;
+  int limit;
+  // Ask user for input
+  std::cout << "Enter the stock symbol: ";
+  std::cin >> stockSymbol;
+
+  std::cout << "Enter the start date (YYYY-MM-DD): ";
+  std::cin >> startDate;
+
+  std::cout << "Enter the end date (YYYY-MM-DD): ";
+  std::cin >> endDate;
+
+  std::cout << "Enter the timeframe (1Min, 1Hour, 1Day): ";
+  std::cin >> timeframe;
+
+  std::cout << "Enter the limit (number): ";
+  std::cin >> limit;
+
+
+  ap.extractData(stockSymbol, startDate, endDate,timeframe, limit);
+  ap.parseJSONData();
   //closed prices stores an old prices first
-  const std::vector<double> closedPrices = ap.extractClosedPrices();
-  for(size_t i = 0; i < closedPrices.size(); i++) {
-    std::cout << "price is " << closedPrices[i] << std::endl;
-  }
+  // const std::vector<double> closedPrices = ap.extractClosedPrices();
+  // for(size_t i = 0; i < closedPrices.size(); i++) {
+  //   std::cout << "price is " << closedPrices[i] << std::endl;
+  // }
 
-  algo A;
-  A.calculateMovingAverage(closedPrices, 10, 20);
-  A.crossOverSignal();
-  A.movingAveragesCSV("SMA.csv", "LMA.csv");
+  // algo A;
+  // A.calculateMovingAverage(closedPrices, 10, 20);
+  // A.crossOverSignal();
+  // A.movingAveragesCSV("SMA.csv", "LMA.csv");
   
-  //std::cout << "size of closedPrices " << closedPrices.size() << std::endl;
+  // std::cout << "size of closedPrices " << closedPrices.size() << std::endl;
   // double sma = 0.0;
   //   for(size_t i = 0; i < 10; i++) {
   //       sma+= closedPrices[i];
@@ -42,5 +68,7 @@ int main() {
   // std::cout << "LMA first elem is " << lma << std::endl;
 
   
+
+
   return 0;
 }

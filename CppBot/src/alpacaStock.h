@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<fstream>
+#include <sstream>//abstraction that represents a sequence of data that can be read from or written to
 //->  library for making HTTP requests 
 #include <curl/curl.h>
 //->JSON parsing library
@@ -15,15 +16,18 @@ class alpacaStock {
     void showInformation();//shows personal stock information 
     void buySellOrder();
     std::string sendGetRequest(const std::string& url);
-    void extractRealtimeInfo();//extract realtime information for specific stock option -> can check timestamps, closed prices etc..
+    void extractData(std::string stockSymbol, std::string startDate,std::string endDate,std::string timeframe, int limit);//Extracting data information based on stock type, start time, end time, timeframe, limit
+    void parseJSONData();
+    //it can check timestamps, closed prices etc..
     void generateCSV(const std::string& filename);
 
     std::vector<double> extractClosedPrices();
     private:
-    //temporary key and secret that user should use
+    //key and secret that user should use
     std::string apiKey;
     std::string apiSecret;
 
+    std::string infoData;
     //to store the realtime information
     std::vector<std::string> realTimeTimeStamp;
     std::vector<double> openingPrices;
