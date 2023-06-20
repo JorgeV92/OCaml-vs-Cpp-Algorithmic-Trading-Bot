@@ -12,34 +12,43 @@ int main() {
   std::cout << "put your alpaca secret: " << std::endl;
   std::cin >> secret;
   alpacaStock ap = alpacaStock(key, secret);
-  //ap.buySellOrder();
-  //ap.showInformation();
 
-  //Provide stock information for the desired time period requested by the user.
-  std::string stockSymbol;
-  std::string startDate;
-  std::string endDate;
-  std::string timeframe;
-  int limit;
-  // Ask user for input
-  std::cout << "Enter the stock symbol: ";
-  std::cin >> stockSymbol;
+  ap.storeAccountInfo();
+  std::string accountData = ap.getAccountData();
+  userInformation ui(accountData, key, secret); 
+  ui.makeUserDB();
 
-  std::cout << "Enter the start date (YYYY-MM-DD): ";
-  std::cin >> startDate;
+  // //ap.buySellOrder();
+  // //ap.showInformation();
 
-  std::cout << "Enter the end date (YYYY-MM-DD): ";
-  std::cin >> endDate;
+  // //Provide stock information for the desired time period requested by the user.
+  // std::string stockSymbol;
+  // std::string startDate;
+  // std::string endDate;
+  // std::string timeframe;
+  // int limit;
+  // // Ask user for input
+  // std::cout << "Enter the stock symbol: ";
+  // std::cin >> stockSymbol;
 
-  std::cout << "Enter the timeframe (1Min, 1Hour, 1Day): ";
-  std::cin >> timeframe;
+  // std::cout << "Enter the start date (YYYY-MM-DD): ";
+  // std::cin >> startDate;
 
-  std::cout << "Enter the limit (number): ";
-  std::cin >> limit;
+  // std::cout << "Enter the end date (YYYY-MM-DD): ";
+  // std::cin >> endDate;
+
+  // std::cout << "Enter the timeframe (1Min, 1Hour, 1Day): ";
+  // std::cin >> timeframe;
+
+  // std::cout << "Enter the limit (number): ";
+  // std::cin >> limit;
 
 
-  ap.extractData(stockSymbol, startDate, endDate,timeframe, limit);
-  ap.parseJSONData();
+  // ap.extractData(stockSymbol, startDate, endDate,timeframe, limit);
+  // ap.parseJSONData();
+
+
+  
   //closed prices stores an old prices first
   // const std::vector<double> closedPrices = ap.extractClosedPrices();
   // for(size_t i = 0; i < closedPrices.size(); i++) {

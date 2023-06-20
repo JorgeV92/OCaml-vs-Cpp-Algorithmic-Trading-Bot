@@ -2,9 +2,13 @@
 #include<unordered_map>
 #include<string>
 #include<iostream>
+#include<fstream>
 class userInformation {
     public:
-    userInformation(std::string data);//constructor
+    userInformation(std::string data,std::string realKey,std::string realSecret);
+    void makeUserDB();
     private:
     std::unordered_map<std::string, std::string> info;
+    std::string apiKey;
+    std::string apiSecret;
 };

@@ -43,7 +43,7 @@ size_t WriteCallback(char* contents, size_t size, size_t nmemb, std::string* res
     return totalSize;
 }
 
-void alpacaStock::showInformation() {
+void alpacaStock::storeAccountInfo() {
     //cUrl initialization -> set various options and perform HTTP requests with cURL.
   CURL* curl = curl_easy_init();
   if (curl) {
@@ -76,10 +76,11 @@ void alpacaStock::showInformation() {
       std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
     } else {
       // Print the response data
-      std::cout << "Response data: " << responseData << std::endl;
-      std::cout << "\n";
-      std::cout << "\n";
-      userInformation UI(responseData);
+      // std::cout << "Response data: " << responseData << std::endl;
+      // std::cout << "\n";
+      // std::cout << "\n";
+      accountData = responseData;
+      
 
     }
 
@@ -89,6 +90,10 @@ void alpacaStock::showInformation() {
     curl_slist_free_all(headers);
     std::cout << "successfully working" << std::endl;
   }
+}
+
+std::string alpacaStock::getAccountData() {
+  return accountData;
 }
 
 void alpacaStock::buySellOrder() {
@@ -197,7 +202,7 @@ void alpacaStock::extractData(std::string stockSymbol, std::string startDate,std
   //std::string url = "https://data.alpaca.markets/v2/stocks/AAPL/bars?start=2022-12-08T09:30:00-04:00&end=2023-06-08T16:00:00-04:00&timeframe=1Day&limit=200";
 
 
-  //send HTTP getRequest to retrieve data
+  //send HTTP getRequest to retrieve data (user specifically required the information)
   std::string responseData = alpacaStock::sendGetRequest(urlString);
   std::cout << "Response is : " << responseData << std::endl;
   infoData =  responseData;
