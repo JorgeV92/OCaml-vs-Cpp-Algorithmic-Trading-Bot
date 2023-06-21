@@ -39,7 +39,7 @@ size_t WriteCallback(char* contents, size_t size, size_t nmemb, std::string* res
     //std::cout << "content is " << contents << std::endl;
     size_t totalSize = size * nmemb;
     response->append(contents, totalSize);
-    std::cout << "totalSize is " << totalSize << std::endl;
+    //std::cout << "totalSize is " << totalSize << std::endl;
     return totalSize;
 }
 
@@ -57,7 +57,7 @@ void alpacaStock::storeAccountInfo() {
     std::string strAPISecret = "APCA-API-SECRET-KEY: " + std::string(apiSecret);
     headers = curl_slist_append(headers, strAPISecret.c_str());
 
-  
+    
     // Create a string to store the response data
     std::string responseData;
 
@@ -67,10 +67,10 @@ void alpacaStock::storeAccountInfo() {
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
 
- 
+    
     // Perform the request
     CURLcode res = curl_easy_perform(curl);
-
+    
     // Check for errors
     if (res != CURLE_OK) {
       std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
@@ -88,7 +88,7 @@ void alpacaStock::storeAccountInfo() {
     // Cleanup the things
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
-    std::cout << "successfully working" << std::endl;
+    // std::cout << "successfully working" << std::endl;
   }
 }
 

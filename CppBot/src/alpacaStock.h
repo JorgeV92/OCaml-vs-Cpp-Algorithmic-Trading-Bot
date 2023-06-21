@@ -27,7 +27,6 @@ class alpacaStock {
     //key and secret that user should use
     std::string apiKey;
     std::string apiSecret;
-
     std::string accountData;
     std::string infoData;
     //to store the realtime information
