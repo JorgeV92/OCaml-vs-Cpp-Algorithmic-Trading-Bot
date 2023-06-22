@@ -48,6 +48,20 @@ void algo::crossOverSignal() {
             std::cout << "No crossover signal at index " << i << std::endl;
         }
     }
+    
+    int lastIdx = LMA.size() - 1;
+    if (SMA[lastIdx] > LMA[lastIdx] && SMA[lastIdx - 1] < LMA[lastIdx - 1]) {
+        FinalSignalForBotToTrade = "buy";
+    } else if (SMA[lastIdx] < LMA[lastIdx] && SMA[lastIdx - 1] > LMA[lastIdx - 1]) {
+        FinalSignalForBotToTrade = "sell";
+    } else {
+        FinalSignalForBotToTrade = "hold";
+    }
+    
+}
+
+std::string algo::getFinalSignalForBotToTrade() {
+    return FinalSignalForBotToTrade;
 }
 
 //generates CSV for moving averages
@@ -79,3 +93,16 @@ void algo::movingAveragesCSV(const std::string& smaFile, const std::string& lmaF
     
     return;
 }
+
+// void algo::runBot() {
+//     if(finalSignalForBotToTrade =="BUY") {
+        
+//     } else if (finalSignalForBotToTrade == "SELL") {
+
+//     } else if (finalSignalForBotToTrade == "HOLD") {
+
+//     } else {
+//         std::cout << "error happened for running bot!" << std::endl;
+//         exit(0);
+//     }
+// }

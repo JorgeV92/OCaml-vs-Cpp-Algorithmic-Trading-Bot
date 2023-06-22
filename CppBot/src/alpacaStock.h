@@ -1,4 +1,7 @@
 #pragma once
+#include"algorithms.h"
+#include "userInfo.h"
+#include "algorithms.h"
 #include<iostream>
 #include<fstream>
 #include <sstream>//abstraction that represents a sequence of data that can be read from or written to
@@ -14,7 +17,6 @@ class alpacaStock {
     std::string orders_url;
     alpacaStock(std::string key, std::string secret);
     void storeAccountInfo();//shows personal stock information 
-    void buySellOrder();
     std::string sendGetRequest(const std::string& url);
     void extractData(std::string stockSymbol, std::string startDate,std::string endDate,std::string timeframe, int limit);//Extracting data information based on stock type, start time, end time, timeframe, limit
     void parseJSONData();
@@ -23,13 +25,15 @@ class alpacaStock {
 
     std::vector<double> extractClosedPrices();
     std::string getAccountData();
+
+    void buySellOrder(std::string symbol, int qty, std::string finalBotSignal);
     private:
     //key and secret that user should use
     std::string apiKey;
     std::string apiSecret;
     std::string accountData;
     std::string infoData;
-    //to store the realtime information
+    //to store the stock information
     std::vector<std::string> realTimeTimeStamp;
     std::vector<double> openingPrices;
     std::vector<double> highestPrices;

@@ -27,7 +27,7 @@ def plottingData(timeStamps, openingPrices, highestPrices, lowestPrices, closedP
     plt.tight_layout()  # Adjust layout to prevent label overlap
     plt.show()
 
-fileName = "/Users/shihyunnam/Desktop/OCaml-vs-Cpp-Algorithmic-Trading-Bot/CppBot/src/realtimeInfo.csv"
+fileName = "/Users/shihyunnam/Desktop/OCaml-vs-Cpp-Algorithmic-Trading-Bot/CppBot/src/stockInfo.csv"
 timeStamps = []
 openingPrices = []
 highestPrices = []

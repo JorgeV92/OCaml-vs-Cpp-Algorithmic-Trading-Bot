@@ -1,5 +1,5 @@
 #include "alpacaStock.h"
-#include "userInfo.h"
+
 
 //generates CSV with whole data
 void alpacaStock::generateCSV(const std::string& filename) {
@@ -96,7 +96,7 @@ std::string alpacaStock::getAccountData() {
   return accountData;
 }
 
-void alpacaStock::buySellOrder() {
+void alpacaStock::buySellOrder(std::string symbol, int qty, std::string finalBotSignal) {
     CURL* curl;
     CURLcode res;
 
@@ -119,7 +119,13 @@ void alpacaStock::buySellOrder() {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         // Set request data for buying a stock
-        std::string orderData = R"({"symbol":"AAPL","qty":1,"side":"buy","type":"market","time_in_force":"gtc"})";
+        std::string orderData;
+        if(finalBotSignal == "buy" || finalBotSignal == "sell") {
+          orderData = R"({"symbol":")" + symbol + R"(","qty":)" + std::to_string(qty) + R"(,"side":")" + finalBotSignal + R"(","type":"market","time_in_force":"gtc"})";
+        } else {
+          std::cout << "probably error happened" << std::endl;
+        }
+
 
         // Set request data for selling a stock
         // std::string orderData = R"({"symbol":"AAPL","qty":1,"side":"sell","type":"market","time_in_force":"gtc"})";
@@ -132,8 +138,9 @@ void alpacaStock::buySellOrder() {
         std::cout << "order finished" << std::endl;
 
         // Check for errors
-        if (res != CURLE_OK)
-            std::cerr << "Request failed: " << curl_easy_strerror(res) << std::endl;
+        if (res != CURLE_OK) {
+          std::cerr << "Request failed: " << curl_easy_strerror(res) << std::endl;
+        }
 
         // Clean up
         curl_slist_free_all(headers);
@@ -282,13 +289,13 @@ if (Json::parseFromStream(reader, jsonStream, &root, &parseErrors)) {//function 
 //   std::cout << "closedPrices is " << closedPrices[i] << std::endl;
 // }
 
-  std::string fileName;
-  std::cout << "put the filename you want to store the stockInformation!" << std::endl;
-  std::cin >> fileName;
-  generateCSV(fileName); 
+  std::cout << "stockInformation will be stored in stockInfo.csv" << std::endl;
+  std::string stockInfoFileName = "stockInfo.csv";
+  generateCSV(stockInfoFileName); 
   return;
 
 }
+
 std::vector<double> alpacaStock::extractClosedPrices() {
   return closedPrices;
 }

@@ -1,6 +1,6 @@
 CC = clang++
-CFLAGS = -std=c++11 -Wall -I /usr/local/Cellar/jsoncpp/1.9.5/include/ -I /usr/local/include/catch2
-LDFLAGS = -lcurl -L /usr/local/Cellar/jsoncpp/1.9.5/lib -ljsoncpp
+CFLAGS = -std=c++11 -Wall -I /usr/local/Cellar/jsoncpp/1.9.5/include/ -I/usr/local/opt/openssl/include 
+LDFLAGS = -lcurl -L /usr/local/Cellar/jsoncpp/1.9.5/lib -ljsoncpp -L/usr/local/opt/openssl/lib -lssl -lcrypto
 
 all: main 
 

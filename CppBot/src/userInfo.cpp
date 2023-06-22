@@ -118,3 +118,36 @@ void userInformation::makeUserDB() {
 
     
 }
+
+
+
+
+// Function to print the hexadecimal representation of a byte array
+// void printHex(const unsigned char* buffer, size_t size) {
+//     for (size_t i = 0; i < size; ++i) {
+//         std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(buffer[i]);
+//     }
+//     std::cout << std::dec << std::endl;
+// }
+
+// std::string computeSHA256(const std::string& message) {
+//     unsigned char hash[SHA256_DIGEST_LENGTH];
+
+//     SHA256_CTX sha256Context;
+//     SHA256_Init(&sha256Context);
+//     SHA256_Update(&sha256Context, message.c_str(), message.length());
+//     SHA256_Final(hash, &sha256Context);
+
+//     std::string sha256Hash(reinterpret_cast<const char*>(hash), SHA256_DIGEST_LENGTH);
+//     return sha256Hash;
+// }
+
+
+//main part
+//  std::string message = "iGCcDRwgk7MrYaN4lqB1KfkXkj58aIax5ehHIxNj";
+
+    // std::string sha256Hash = computeSHA256(message);
+
+    // std::cout << "Message: " << message << std::endl;
+    // std::cout << "SHA-256 Hash: ";
+    // printHex(reinterpret_cast<const unsigned char*>(sha256Hash.c_str()), sha256Hash.length());
